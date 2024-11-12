@@ -1,0 +1,48 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+
+android {
+    compileSdkVersion 33 // Make sure to use an appropriate version
+
+    defaultConfig {
+        applicationId "com.example.my_app"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21 // Change to VERSION_21
+        targetCompatibility JavaVersion.VERSION_21 // Change to VERSION_21
+    }
+
+    // If using Kotlin, update this too
+    kotlinOptions {
+        jvmTarget = "21"
+    }
+
+    buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+    }
+}
+
+}
+
