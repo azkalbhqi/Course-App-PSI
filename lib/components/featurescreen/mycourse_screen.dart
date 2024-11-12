@@ -52,7 +52,17 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final course = snapshot.data![index];
-                return MyCourseCard(course: course);
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CourseDetailScreen(course: course),
+                      ),
+                    );
+                  },
+                  child: MyCourseCard(course: course),
+                );
               },
             );
           }
@@ -96,6 +106,55 @@ class MyCourseCard extends StatelessWidget {
             Text(
               "\$${course['price'] ?? 'N/A'}",
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CourseDetailScreen extends StatelessWidget {
+  final Map<String, dynamic> course;
+
+  const CourseDetailScreen({Key? key, required this.course}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(course['title'] ?? 'Course Details'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              course['thumbnail'] ?? '',
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              course['title'] ?? '',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              course['description'] ?? '',
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Price: \$${course['price'] ?? 'N/A'}",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Content: ${course['content'] ?? 'No content available'}",
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
